@@ -1,0 +1,13 @@
+{
+  "id": "builtin.language-basics-html",
+  "name": "Language Basics HTML",
+  "description": "Provides syntax highlighting and bracket matching in HTML files.",
+  "languages": [
+    {
+      "id": "html",
+      "extensions": [".html"],
+      "tokenize": "src/tokenizeHtml.js",
+      "configuration": "./languageConfiguration.json"
+    }
+  ]
+}
