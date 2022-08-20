@@ -13,7 +13,8 @@ const State = {
   InsideAttributeDoubleQuote: 9,
   InsideBlockComment: 10,
   None: 11,
-  InsideString: 12,
+  InsideDoubleQuoteString: 12,
+  InsideSingleQuoteString: 13,
 }
 
 export const StateMap = {}
@@ -52,43 +53,57 @@ export const TokenMap = {
   [TokenType.PunctuationString]: 'PunctuationString',
 }
 
-const RE_WHITESPACE = /^\s+/
-const RE_DOUBLE_QUOTE = /^"/
-const RE_NEWLINE_WHITESPACE = /^\n\s*/
-const RE_BLOCK_COMMENT_START = /^<!--/
+const RE_ANGLE_BRACKET_CLOSE = /^>/
+const RE_ANGLE_BRACKET_ONLY = /^</
+const RE_ANGLE_BRACKET_OPEN = /^</
+const RE_ANGLE_BRACKET_OPEN_TAG = /^<(?!\s)/
+const RE_ANY_TEXT = /^[^\n]+/
+const RE_ATTRIBUTE_NAME = /^[a-zA-Z\d\-]+/
 const RE_BLOCK_COMMENT_CONTENT = /^.(?:.*?)(?=-->|$)/s
 const RE_BLOCK_COMMENT_END = /^-->/
-const RE_ANGLE_BRACKET_OPEN_TAG = /^<(?!\s)/
-const RE_ANGLE_BRACKET_CLOSE = /^>/
+const RE_BLOCK_COMMENT_START = /^<!--/
+const RE_DASH_DASH = /^\-\-/
+const RE_DOUBLE_QUOTE = /^"/
+const RE_EQUAL_SIGN = /^=/
+const RE_EXCLAMATION_MARK = /^!/
+const RE_INVALID_INSIDE_ClOSING_TAG = /^[^a-zA-Z>]/
+const RE_INVALID_INSIDE_OPENING_TAG = /^[^a-zA-Z>]/
+const RE_NEWLINE = /^\n/
+const RE_NEWLINE_WHITESPACE = /^\n\s*/
+const RE_NOT_TAGNAME = /^[^a-zA-Z\d]+/
+const RE_PUNCTUATION = /^[<;'".,]/
+const RE_PUNCTUATION_SELF_CLOSING = /^\/>/
+const RE_SELF_CLOSING = /^\/>/
+const RE_SINGLE_QUOTE = /^'/
+const RE_SLASH = /^\//
+const RE_STRING_DOUBLE_QUOTE_CONTENT = /^[^"]+/
+const RE_STRING_SINGLE_QUOTE_CONTENT = /^[^']+/
+const RE_TAG_TEXT = /^[^\s>]+/
 const RE_TAGNAME = /^[!\w]+/
 const RE_TEXT = /^[^<>\n]+/
-const RE_ANY_TEXT = /^[^\n]+/
-const RE_SLASH = /^\//
-const RE_ATTRIBUTE_NAME = /^[a-zA-Z\d\-]+/
-const RE_EQUAL_SIGN = /^=/
-const RE_STRING_DOUBLE_QUOTE_CONTENT = /^[^"]+/
-const RE_PUNCTUATION_SELF_CLOSING = /^\/>/
-const RE_INVALID_INSIDE_OPENING_TAG = /^[^a-zA-Z>]/
-const RE_INVALID_INSIDE_ClOSING_TAG = /^[^a-zA-Z>]/
-const RE_PUNCTUATION = /^[<;'".,]/
-const RE_NOT_TAGNAME = /^[^a-zA-Z\d]+/
+const RE_WHITESPACE = /^\s+/
 const RE_WORD = /^[^\s]+/
-const RE_ANGLE_BRACKET_ONLY = /^</
-const RE_NEWLINE = /^\n/
-const RE_EXCLAMATION_MARK = /^!/
-const RE_SELF_CLOSING = /^\/>/
-const RE_DASH_DASH = /^\-\-/
-const RE_TAG_TEXT = /^[^\s>]+/
-const RE_ANGLE_BRACKET_OPEN = /^</
 
 export const initialLineState = {
   state: State.TopLevelContent,
 }
 
+/**
+ *
+ * @param {any} lineStateA
+ * @param {any} lineStateB
+ * @returns
+ */
 export const isLineStateEqual = (lineStateA, lineStateB) => {
   return lineStateA.state === lineStateB.state
 }
 
+/**
+ *
+ * @param {string} line
+ * @param {any} lineState
+ * @returns
+ */
 export const tokenizeLine = (line, lineState) => {
   let next = null
   let index = 0
@@ -205,7 +220,10 @@ export const tokenizeLine = (line, lineState) => {
           state = State.AfterAttributeEqualSign
         } else if ((next = part.match(RE_DOUBLE_QUOTE))) {
           token = TokenType.PunctuationString
-          state = State.InsideString
+          state = State.InsideDoubleQuoteString
+        } else if ((next = part.match(RE_SINGLE_QUOTE))) {
+          token = TokenType.PunctuationString
+          state = State.InsideSingleQuoteString
         } else if ((next = part.match(RE_TAG_TEXT))) {
           token = TokenType.Text
           state = State.InsideOpeningTag
@@ -221,7 +239,10 @@ export const tokenizeLine = (line, lineState) => {
       case State.AfterAttributeEqualSign:
         if ((next = part.match(RE_DOUBLE_QUOTE))) {
           token = TokenType.PunctuationString
-          state = State.InsideString
+          state = State.InsideDoubleQuoteString
+        } else if ((next = part.match(RE_SINGLE_QUOTE))) {
+          token = TokenType.PunctuationString
+          state = State.InsideSingleQuoteString
         } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
           token = TokenType.PunctuationTag
           state = State.TopLevelContent
@@ -229,13 +250,24 @@ export const tokenizeLine = (line, lineState) => {
           throw new Error('no')
         }
         break
-      case State.InsideString:
+      case State.InsideDoubleQuoteString:
         if ((next = part.match(RE_DOUBLE_QUOTE))) {
           token = TokenType.PunctuationString
           state = State.InsideOpeningTag
         } else if ((next = part.match(RE_STRING_DOUBLE_QUOTE_CONTENT))) {
           token = TokenType.String
-          state = State.InsideString
+          state = State.InsideDoubleQuoteString
+        } else {
+          throw new Error('no')
+        }
+        break
+      case State.InsideSingleQuoteString:
+        if ((next = part.match(RE_SINGLE_QUOTE))) {
+          token = TokenType.PunctuationString
+          state = State.InsideOpeningTag
+        } else if ((next = part.match(RE_STRING_SINGLE_QUOTE_CONTENT))) {
+          token = TokenType.String
+          state = State.InsideSingleQuoteString
         } else {
           throw new Error('no')
         }
@@ -266,13 +298,3 @@ export const tokenizeLine = (line, lineState) => {
     tokens,
   }
 }
-
-// tokenizeLine(initialContext, '    <h1$0></h1>') //?
-// tokenizeLine(initialContext, `<<`)
-
-// tokenizeLine(initialContext, `<h1><//`) //?
-// tokenizeLine(initialContext, `<h1 class=></h1>`) //?
-
-// tokenizeLine(initialLineState, `<h1234567 class""=></h1234567>`)
-
-tokenizeLine('<input disabled autofocus>', initialLineState) //?
