@@ -59,7 +59,8 @@ const RE_ANGLE_BRACKET_OPEN = /^</
 const RE_ANGLE_BRACKET_OPEN_TAG = /^<(?!\s)/
 const RE_ANY_TEXT = /^[^\n]+/
 const RE_ATTRIBUTE_NAME = /^[a-zA-Z\d\-]+/
-const RE_BLOCK_COMMENT_CONTENT = /^.(?:.*?)(?=-->|$)/s
+const RE_BLOCK_COMMENT_CONTENT_1 = /^.+?(?=-->)/s
+const RE_BLOCK_COMMENT_CONTENT_2 = /^.+$/s
 const RE_BLOCK_COMMENT_END = /^-->/
 const RE_BLOCK_COMMENT_START = /^<!--/
 const RE_DASH_DASH = /^\-\-/
@@ -275,12 +276,16 @@ export const tokenizeLine = (line, lineState) => {
         }
         break
       case State.InsideBlockComment:
-        if ((next = part.match(RE_BLOCK_COMMENT_CONTENT))) {
+        part
+        if ((next = part.match(RE_BLOCK_COMMENT_CONTENT_1))) {
           token = TokenType.Comment
           state = State.InsideBlockComment
         } else if ((next = part.match(RE_BLOCK_COMMENT_END))) {
           token = TokenType.Comment
           state = State.TopLevelContent
+        } else if ((next = part.match(RE_BLOCK_COMMENT_CONTENT_2))) {
+          token = TokenType.Comment
+          state = State.InsideBlockComment
         } else {
           throw new Error('no')
         }
