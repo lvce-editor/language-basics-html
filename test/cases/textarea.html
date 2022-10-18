@@ -1,0 +1,1 @@
+<textarea id="noVNC_clipboard_text" rows=5></textarea>
