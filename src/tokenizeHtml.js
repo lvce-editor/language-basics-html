@@ -181,6 +181,9 @@ export const tokenizeLine = (line, lineState) => {
         if ((next = part.match(RE_TAGNAME))) {
           token = TokenType.TagName
           state = State.AfterClosingTagName
+        } else if ((next = part.match(RE_WHITESPACE))) {
+          token = TokenType.Whitespace
+          state = State.TopLevelContent
         } else if ((next = part.match(RE_ANY_TEXT))) {
           token = TokenType.Text
           state = State.TopLevelContent
@@ -302,9 +305,13 @@ export const tokenizeLine = (line, lineState) => {
         state
         throw new Error('no')
     }
+
     const tokenLength = next[0].length
     index += tokenLength
     tokens.push(token, tokenLength)
+  }
+  if (state === State.AfterClosingTagAngleBrackets) {
+    state = State.TopLevelContent
   }
   return {
     state,
