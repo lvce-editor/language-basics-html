@@ -1,5 +1,3 @@
-PunctuationTag
-TagName
 Comment
 Comment
 Comment
