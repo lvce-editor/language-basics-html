@@ -63,6 +63,7 @@ const RE_BLOCK_COMMENT_CONTENT_1 = /^.+?(?=-->)/s
 const RE_BLOCK_COMMENT_CONTENT_2 = /^.+$/s
 const RE_BLOCK_COMMENT_END = /^-->/
 const RE_BLOCK_COMMENT_START = /^<!--/
+const RE_DOCTYPE = /^<!(?=\w)/
 const RE_DASH_DASH = /^\-\-/
 const RE_DOUBLE_QUOTE = /^"/
 const RE_EQUAL_SIGN = /^=/
@@ -130,6 +131,9 @@ export const tokenizeLine = (line, lineState) => {
         } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
           token = TokenType.Text
           state = State.TopLevelContent
+        } else if ((next = part.match(RE_DOCTYPE))) {
+          token = TokenType.PunctuationTag
+          state = State.AfterOpeningAngleBracket
         } else if ((next = part.match(RE_ANGLE_BRACKET_OPEN))) {
           token = TokenType.Text
           state = State.TopLevelContent
