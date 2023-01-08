@@ -58,7 +58,7 @@ const RE_ANGLE_BRACKET_ONLY = /^</
 const RE_ANGLE_BRACKET_OPEN = /^</
 const RE_ANGLE_BRACKET_OPEN_TAG = /^<(?!\s)/
 const RE_ANY_TEXT = /^[^\n]+/
-const RE_ATTRIBUTE_NAME = /^[a-zA-Z\d\-]+/
+const RE_ATTRIBUTE_NAME = /^[a-zA-Z\d\-\:]+/
 const RE_BLOCK_COMMENT_CONTENT_1 = /^.+?(?=-->)/s
 const RE_BLOCK_COMMENT_CONTENT_2 = /^.+$/s
 const RE_BLOCK_COMMENT_END = /^-->/
