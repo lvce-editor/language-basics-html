@@ -15,6 +15,8 @@ const State = {
   None: 11,
   InsideDoubleQuoteString: 12,
   InsideSingleQuoteString: 13,
+  InsideScriptContent: 14,
+  InsideStyleContent: 15,
 }
 
 export const StateMap = {}
@@ -86,9 +88,13 @@ const RE_TEXT = /^[^<>\n]+/
 const RE_WHITESPACE = /^\s+/
 const RE_WORD = /^[^\s]+/
 const RE_ATTRIBUTE_VALUE_UNQUOTED = /^[^<>]+/
+const RE_SCRIPT_CONTENT = /^.+(?=(?:<\/script)|$)/s
+const RE_SCRIPT_CONTENT_END = /^<\/script/
 
 export const initialLineState = {
   state: State.TopLevelContent,
+  tag: '',
+  stack: [],
 }
 
 /**
@@ -115,6 +121,7 @@ export const tokenizeLine = (line, lineState) => {
   let tokens = []
   let token = TokenType.None
   let state = lineState.state
+  let tag = lineState.tag
   while (index < line.length) {
     const part = line.slice(index)
     switch (state) {
@@ -146,6 +153,7 @@ export const tokenizeLine = (line, lineState) => {
         if ((next = part.match(RE_TAGNAME))) {
           token = TokenType.TagName
           state = State.InsideOpeningTag
+          tag = next[0]
         } else if ((next = part.match(RE_SLASH))) {
           token = TokenType.PunctuationTag
           state = State.AfterClosingTagAngleBrackets
@@ -167,6 +175,9 @@ export const tokenizeLine = (line, lineState) => {
         if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
           token = TokenType.PunctuationTag
           state = State.TopLevelContent
+          if (tag === 'script') {
+            state = State.InsideScriptContent
+          }
         } else if ((next = part.match(RE_EXCLAMATION_MARK))) {
           token = TokenType.PunctuationTag
           state = State.InsideOpeningTag
@@ -220,6 +231,9 @@ export const tokenizeLine = (line, lineState) => {
         } else if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
           token = TokenType.PunctuationTag
           state = State.TopLevelContent
+          if (tag === 'script') {
+            state = State.InsideScriptContent
+          }
         } else if ((next = part.match(RE_TAG_TEXT))) {
           token = TokenType.Text
           state = State.TopLevelContent
@@ -308,6 +322,21 @@ export const tokenizeLine = (line, lineState) => {
           throw new Error('no')
         }
         break
+      case State.InsideScriptContent:
+        if ((next = part.match(RE_SCRIPT_CONTENT_END))) {
+          token = TokenType.TagName
+          state = State.AfterClosingTagName
+          tokens.push(TokenType.PunctuationTag, 2, TokenType.TagName, 6)
+          index += next[0].length
+          continue
+        } else if ((next = part.match(RE_SCRIPT_CONTENT))) {
+          token = TokenType.Text
+          state = State.InsideScriptContent
+        } else {
+          part
+          throw new Error('no')
+        }
+        break
       default:
         state
         throw new Error('no')
@@ -323,5 +352,6 @@ export const tokenizeLine = (line, lineState) => {
   return {
     state,
     tokens,
+    tag,
   }
 }
