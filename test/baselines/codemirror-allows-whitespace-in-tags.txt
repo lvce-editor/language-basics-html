@@ -1,0 +1,17 @@
+PunctuationTag
+NewLine
+Text
+NewLine
+Text
+NewLine
+Text
+Text
+Text
+PunctuationTag
+PunctuationTag
+NewLine
+Text
+NewLine
+Text
+Text
+NewLine
