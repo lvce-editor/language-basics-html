@@ -187,6 +187,9 @@ export const tokenizeLine = (line, lineState) => {
         } else if ((next = part.match(RE_DASH_DASH))) {
           token = TokenType.Comment
           state = State.InsideBlockComment
+        } else if ((next = part.match(RE_PUNCTUATION_SELF_CLOSING))) {
+          token = TokenType.PunctuationTag
+          state = State.TopLevelContent
         } else if ((next = part.match(RE_TAG_TEXT))) {
           token = TokenType.Text
           state = State.InsideOpeningTag
