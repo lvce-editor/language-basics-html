@@ -87,7 +87,7 @@ const RE_TAGNAME = /^[!\w]+/
 const RE_TEXT = /^[^<>\n]+/
 const RE_WHITESPACE = /^\s+/
 const RE_WORD = /^[^\s]+/
-const RE_ATTRIBUTE_VALUE_UNQUOTED = /^[^<>]+/
+const RE_ATTRIBUTE_VALUE_UNQUOTED = /^[^<>\s]+/
 const RE_SCRIPT_CONTENT = /^..*?(?=(?:<\/script)|$)/s
 const RE_SCRIPT_CONTENT_END = /^<\/script/
 
