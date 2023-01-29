@@ -4,6 +4,12 @@ Whitespace
 AttributeName
 Punctuation
 String
+Whitespace
+AttributeName
+Whitespace
+AttributeName
+Punctuation
+String
 PunctuationTag
 PunctuationTag
 PunctuationTag

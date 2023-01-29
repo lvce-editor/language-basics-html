@@ -4,5 +4,17 @@ Whitespace
 AttributeName
 Punctuation
 String
+Whitespace
+AttributeName
+Punctuation
+String
+Whitespace
+AttributeName
+Punctuation
+String
+Whitespace
+AttributeName
+Punctuation
+String
 PunctuationTag
 NewLine
