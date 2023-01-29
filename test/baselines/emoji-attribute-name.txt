@@ -1,0 +1,9 @@
+PunctuationTag
+TagName
+Whitespace
+Text
+Text
+PunctuationTag
+PunctuationTag
+TagName
+PunctuationTag
