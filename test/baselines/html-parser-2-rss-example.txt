@@ -347,7 +347,6 @@ NewLine
 Text
 PunctuationTag
 TagName
-Text
 Whitespace
 AttributeName
 Punctuation
