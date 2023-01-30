@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
 
-const REPO = 'https://github.com/fb55/htmlparser2'
+const REPOSITORY = 'https://github.com/fb55/htmlparser2'
 const COMMIT = '415d21b98bb30422748da68885084ee83857858a'
 
 const getTestName = (line) => {
@@ -37,7 +37,7 @@ const getAllTests = async (folder) => {
 const main = async () => {
   process.chdir(root)
   await rm(`${root}/.tmp`, { recursive: true, force: true })
-  await execaCommand(`git clone ${REPO} .tmp/html-parser-2`)
+  await execaCommand(`git clone ${REPOSITORY} .tmp/html-parser-2`)
   process.chdir(`${root}/.tmp/html-parser-2`)
   await execaCommand(`git checkout ${COMMIT}`)
   process.chdir(root)
