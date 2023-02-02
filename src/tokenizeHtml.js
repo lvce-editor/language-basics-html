@@ -117,6 +117,14 @@ export const isLineStateEqual = (lineStateA, lineStateB) => {
 
 export const hasArrayReturn = true
 
+const getEmbeddedScriptLanguageId = () => {
+  return 'javascript'
+}
+
+const getEmbeddedStyleLanguageId = () => {
+  return 'css'
+}
+
 /**
  *
  * @param {string} line
@@ -133,7 +141,6 @@ export const tokenizeLine = (line, lineState) => {
   let embeddedLanguage = lineState.embeddedLanguage
   let embeddedLanguageStart = lineState.embeddedLanguageStart
   let embeddedLanguageEnd = lineState.embeddedLanguageEnd
-  let embeddedState = lineState.embeddedState
   while (index < line.length) {
     const part = line.slice(index)
     switch (state) {
@@ -187,14 +194,18 @@ export const tokenizeLine = (line, lineState) => {
         if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
           token = TokenType.PunctuationTag
           state = State.TopLevelContent
-          if (tag === 'script') {
-            state = State.InsideScriptContent
-            embeddedLanguage = 'javascript'
-            embeddedLanguageStart = index + next[0].length
-          } else if (tag === 'style') {
-            state = State.InsideStyleContent
-            embeddedLanguage = 'css'
-            embeddedLanguageStart = index + next[0].length
+          switch (tag) {
+            case 'script':
+              state = State.InsideScriptContent
+              embeddedLanguage = getEmbeddedScriptLanguageId()
+              embeddedLanguageStart = index + next[0].length
+              break
+            case 'style':
+              state = State.InsideStyleContent
+              embeddedLanguage = getEmbeddedStyleLanguageId()
+              embeddedLanguageStart = index + next[0].length
+            default:
+              break
           }
         } else if ((next = part.match(RE_EXCLAMATION_MARK))) {
           token = TokenType.PunctuationTag
