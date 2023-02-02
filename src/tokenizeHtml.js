@@ -121,10 +121,9 @@ export const hasArrayReturn = true
  *
  * @param {string} line
  * @param {any} lineState
- * @param {any} getTokenizer
  * @returns
  */
-export const tokenizeLine = (line, lineState, getTokenizer) => {
+export const tokenizeLine = (line, lineState) => {
   let next = null
   let index = 0
   let tokens = []
