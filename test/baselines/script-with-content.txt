@@ -2,7 +2,7 @@ PunctuationTag
 TagName
 PunctuationTag
 NewLine
-Text
+Embedded
 NewLine
 PunctuationTag
 TagName

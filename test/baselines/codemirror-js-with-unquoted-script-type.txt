@@ -5,7 +5,7 @@ AttributeName
 Punctuation
 String
 PunctuationTag
-Text
+Embedded
 PunctuationTag
 TagName
 PunctuationTag

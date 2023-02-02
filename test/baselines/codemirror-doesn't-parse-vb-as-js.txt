@@ -7,7 +7,7 @@ PunctuationString
 String
 PunctuationString
 PunctuationTag
-Text
+Embedded
 PunctuationTag
 TagName
 PunctuationTag
