@@ -369,7 +369,6 @@ export const tokenizeLine = (line, lineState, getTokenizer) => {
           state = State.AfterClosingTagName
           tokens.push(TokenType.PunctuationTag, 2, TokenType.TagName, 6)
           embeddedLanguageEnd = index
-          console.log({ embeddedLanguageEnd })
           index += next[0].length
           embeddedLanguage = ''
           continue
@@ -392,7 +391,6 @@ export const tokenizeLine = (line, lineState, getTokenizer) => {
     index += tokenLength
     tokens.push(token, tokenLength)
   }
-  console.log({ embeddedLanguageEnd })
   if (state === State.AfterClosingTagAngleBrackets) {
     state = State.TopLevelContent
   }
