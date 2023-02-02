@@ -38,6 +38,7 @@ export const TokenType = {
   Error: 141,
   PunctuationString: 11,
   NewLine: 891,
+  Embedded: 999,
 }
 
 export const TokenMap = {
@@ -53,6 +54,7 @@ export const TokenMap = {
   [TokenType.Punctuation]: 'Punctuation',
   [TokenType.Error]: 'Error',
   [TokenType.PunctuationString]: 'PunctuationString',
+  [TokenType.Embedded]: 'Embedded',
 }
 
 const RE_ANGLE_BRACKET_CLOSE = /^>/
@@ -90,11 +92,17 @@ const RE_WORD = /^[^\s]+/
 const RE_ATTRIBUTE_VALUE_UNQUOTED = /^[^<>\s]+/
 const RE_SCRIPT_CONTENT = /^..*?(?=(?:<\/script)|$)/s
 const RE_SCRIPT_CONTENT_END = /^<\/script/
+const RE_STYLE_CONTENT = /^..*?(?=(?:<\/style)|$)/s
+const RE_STYLE_CONTENT_END = /^<\/style/
 
 export const initialLineState = {
   state: State.TopLevelContent,
   tag: '',
   stack: [],
+  embeddedLanguage: '',
+  embeddedLanguageStart: 0,
+  embeddedLanguageEnd: 0,
+  embeddedState: undefined,
 }
 
 /**
@@ -113,15 +121,20 @@ export const hasArrayReturn = true
  *
  * @param {string} line
  * @param {any} lineState
+ * @param {any} getTokenizer
  * @returns
  */
-export const tokenizeLine = (line, lineState) => {
+export const tokenizeLine = (line, lineState, getTokenizer) => {
   let next = null
   let index = 0
   let tokens = []
   let token = TokenType.None
   let state = lineState.state
   let tag = lineState.tag
+  let embeddedLanguage = lineState.embeddedLanguage
+  let embeddedLanguageStart = lineState.embeddedLanguageStart
+  let embeddedLanguageEnd = lineState.embeddedLanguageEnd
+  let embeddedState = lineState.embeddedState
   while (index < line.length) {
     const part = line.slice(index)
     switch (state) {
@@ -177,6 +190,12 @@ export const tokenizeLine = (line, lineState) => {
           state = State.TopLevelContent
           if (tag === 'script') {
             state = State.InsideScriptContent
+            embeddedLanguage = 'javascript'
+            embeddedLanguageStart = index + next[0].length
+          } else if (tag === 'style') {
+            state = State.InsideStyleContent
+            embeddedLanguage = 'css'
+            embeddedLanguageStart = index + next[0].length
           }
         } else if ((next = part.match(RE_EXCLAMATION_MARK))) {
           token = TokenType.PunctuationTag
@@ -236,6 +255,7 @@ export const tokenizeLine = (line, lineState) => {
           state = State.TopLevelContent
           if (tag === 'script') {
             state = State.InsideScriptContent
+            embeddedLanguage = 'javascript'
           }
         } else if ((next = part.match(RE_TAG_TEXT))) {
           token = TokenType.Text
@@ -331,10 +351,33 @@ export const tokenizeLine = (line, lineState) => {
           state = State.AfterClosingTagName
           tokens.push(TokenType.PunctuationTag, 2, TokenType.TagName, 6)
           index += next[0].length
+          embeddedLanguage = ''
           continue
         } else if ((next = part.match(RE_SCRIPT_CONTENT))) {
-          token = TokenType.Text
+          token = TokenType.Embedded
           state = State.InsideScriptContent
+          embeddedLanguageStart = index
+          embeddedLanguageEnd = index + next[0].length
+        } else {
+          part
+          throw new Error('no')
+        }
+        break
+      case State.InsideStyleContent:
+        if ((next = part.match(RE_STYLE_CONTENT_END))) {
+          token = TokenType.TagName
+          state = State.AfterClosingTagName
+          tokens.push(TokenType.PunctuationTag, 2, TokenType.TagName, 6)
+          embeddedLanguageEnd = index
+          console.log({ embeddedLanguageEnd })
+          index += next[0].length
+          embeddedLanguage = ''
+          continue
+        } else if ((next = part.match(RE_STYLE_CONTENT))) {
+          token = TokenType.Embedded
+          state = State.InsideStyleContent
+          embeddedLanguageStart = index
+          embeddedLanguageEnd = index + next[0].length
         } else {
           part
           throw new Error('no')
@@ -349,6 +392,7 @@ export const tokenizeLine = (line, lineState) => {
     index += tokenLength
     tokens.push(token, tokenLength)
   }
+  console.log({ embeddedLanguageEnd })
   if (state === State.AfterClosingTagAngleBrackets) {
     state = State.TopLevelContent
   }
@@ -356,5 +400,8 @@ export const tokenizeLine = (line, lineState) => {
     state,
     tokens,
     tag,
+    embeddedLanguage,
+    embeddedLanguageStart,
+    embeddedLanguageEnd,
   }
 }
