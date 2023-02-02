@@ -4,5 +4,5 @@ PunctuationTag
 PunctuationTag
 TagName
 PunctuationTag
-Text
+Embedded
 NewLine
