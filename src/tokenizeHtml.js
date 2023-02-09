@@ -60,7 +60,7 @@ export const TokenMap = {
 const RE_ANGLE_BRACKET_CLOSE = /^>/
 const RE_ANGLE_BRACKET_ONLY = /^</
 const RE_ANGLE_BRACKET_OPEN = /^</
-const RE_ANGLE_BRACKET_OPEN_TAG = /^<(?![\s!])/
+const RE_ANGLE_BRACKET_OPEN_TAG = /^<(?![\s!\%])/
 const RE_ANY_TEXT = /^[^\n]+/
 const RE_ATTRIBUTE_NAME = /^[a-zA-Z\d\-\:]+/
 const RE_BLOCK_COMMENT_CONTENT_1 = /^.+?(?=-->)/s
