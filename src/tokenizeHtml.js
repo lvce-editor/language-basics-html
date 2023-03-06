@@ -293,6 +293,9 @@ export const tokenizeLine = (line, lineState) => {
             embeddedLanguage = embeddedLanguageId
             embeddedLanguageStart = index + next[0].length
           }
+        } else if ((next = part.match(RE_DOUBLE_QUOTE))) {
+          token = TokenType.Punctuation
+          state = State.InsideDoubleQuoteString
         } else if ((next = part.match(RE_TAG_TEXT))) {
           token = TokenType.Text
           state = State.TopLevelContent
