@@ -348,6 +348,9 @@ export const tokenizeLine = (line, lineState) => {
         } else if ((next = part.match(RE_ATTRIBUTE_VALUE_UNQUOTED))) {
           token = TokenType.String
           state = State.InsideOpeningTag
+        } else if ((next = part.match(RE_WHITESPACE))) {
+          token = TokenType.Whitespace
+          state = State.AfterAttributeEqualSign
         } else {
           part
           throw new Error('no')
