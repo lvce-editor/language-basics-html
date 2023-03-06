@@ -274,6 +274,12 @@ export const tokenizeLine = (line, lineState) => {
         } else if ((next = part.match(RE_TEXT))) {
           token = TokenType.Text
           state = State.TopLevelContent
+        } else if ((next = part.match(RE_WHITESPACE))) {
+          token = TokenType.Whitespace
+          state = State.AfterClosingTagName
+        } else if ((next = part.match(RE_ANGLE_BRACKET_OPEN_TAG))) {
+          token = TokenType.PunctuationTag
+          state = State.AfterOpeningAngleBracket
         } else {
           throw new Error('no')
         }
