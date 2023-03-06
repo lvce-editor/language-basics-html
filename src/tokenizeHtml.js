@@ -279,6 +279,19 @@ export const tokenizeLine = (line, lineState) => {
         if ((next = part.match(RE_ANGLE_BRACKET_CLOSE))) {
           token = TokenType.PunctuationTag
           state = State.TopLevelContent
+          switch (tag) {
+            case 'script':
+              state = State.InsideScriptContent
+              embeddedLanguage = getEmbeddedScriptLanguageId()
+              embeddedLanguageStart = index + next[0].length
+              break
+            case 'style':
+              state = State.InsideStyleContent
+              embeddedLanguage = getEmbeddedStyleLanguageId()
+              embeddedLanguageStart = index + next[0].length
+            default:
+              break
+          }
         } else if ((next = part.match(RE_EQUAL_SIGN))) {
           token = TokenType.Punctuation
           state = State.AfterAttributeEqualSign
