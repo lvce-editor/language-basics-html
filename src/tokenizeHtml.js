@@ -72,6 +72,7 @@ const RE_DOCTYPE = /^<!(?=\w)/
 const RE_DASH_DASH = /^\-\-/
 const RE_DOUBLE_QUOTE = /^"/
 const RE_EQUAL_SIGN = /^=/
+const RE_WHITESPACE_THEN_EQUAL_SIGN = /^\s+(?==)/
 const RE_EXCLAMATION_MARK = /^!/
 const RE_INVALID_INSIDE_ClOSING_TAG = /^[^a-zA-Z>]/
 const RE_INVALID_INSIDE_OPENING_TAG = /^[^a-zA-Z>]/
@@ -326,6 +327,9 @@ export const tokenizeLine = (line, lineState) => {
         } else if ((next = part.match(RE_TAG_TEXT))) {
           token = TokenType.Text
           state = State.InsideOpeningTag
+        } else if ((next = part.match(RE_WHITESPACE_THEN_EQUAL_SIGN))) {
+          token = TokenType.Whitespace
+          state = State.AfterAttributeName
         } else if ((next = part.match(RE_WHITESPACE))) {
           token = TokenType.Whitespace
           state = State.InsideOpeningTagAndHasSeenWhitespace
