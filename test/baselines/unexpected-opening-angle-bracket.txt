@@ -1,0 +1,6 @@
+PunctuationTag
+TagName
+Text
+NewLine
+Text
+PunctuationTag
