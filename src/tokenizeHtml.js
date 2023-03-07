@@ -59,7 +59,6 @@ export const TokenMap = {
 }
 
 const RE_ANGLE_BRACKET_CLOSE = /^>/
-const RE_ANGLE_BRACKET_ONLY = /^</
 const RE_ANGLE_BRACKET_OPEN = /^</
 const RE_ANGLE_BRACKET_OPEN_TAG = /^<(?![\s!\%])/
 const RE_ANY_TEXT = /^[^\n]+/
@@ -74,12 +73,6 @@ const RE_DOUBLE_QUOTE = /^"/
 const RE_EQUAL_SIGN = /^=/
 const RE_WHITESPACE_THEN_EQUAL_SIGN = /^\s+(?==)/
 const RE_EXCLAMATION_MARK = /^!/
-const RE_INVALID_INSIDE_ClOSING_TAG = /^[^a-zA-Z>]/
-const RE_INVALID_INSIDE_OPENING_TAG = /^[^a-zA-Z>]/
-const RE_NEWLINE = /^\n/
-const RE_NEWLINE_WHITESPACE = /^\n\s*/
-const RE_NOT_TAGNAME = /^[^a-zA-Z\d]+/
-const RE_PUNCTUATION = /^[<;'".,]/
 const RE_PUNCTUATION_SELF_CLOSING = /^\/>/
 const RE_SELF_CLOSING = /^\/>/
 const RE_SINGLE_QUOTE = /^'/
@@ -90,7 +83,6 @@ const RE_TAG_TEXT = /^[^\s>]+/
 const RE_TAGNAME = /^[!\w\:][!\w\:\d\-]*/
 const RE_TEXT = /^[^<>\n]+/
 const RE_WHITESPACE = /^\s+/
-const RE_WORD = /^[^\s]+/
 const RE_ATTRIBUTE_VALUE_UNQUOTED = /^[^<>\s]+/
 const RE_SCRIPT_CONTENT = /^..*?(?=(?:<\/script)|$)/s
 const RE_SCRIPT_CONTENT_END = /^<\/script/
