@@ -86,8 +86,9 @@ const RE_WHITESPACE = /^\s+/
 const RE_ATTRIBUTE_VALUE_UNQUOTED = /^[^<>\s]+/
 const RE_SCRIPT_CONTENT = /^..*?(?=(?:<\/script)|$)/s
 const RE_SCRIPT_CONTENT_END = /^<\/script/
-const RE_STYLE_CONTENT = /^..*?(?=(?:<\/style)|$)/s
+const RE_STYLE_CONTENT = /^..*?(?=(?:<\/(?:style|head))|$)/s
 const RE_STYLE_CONTENT_END = /^<\/style/
+const RE_STYLE_CONTENT_END_2 = /^<\/head/
 
 export const initialLineState = {
   state: State.TopLevelContent,
@@ -414,10 +415,19 @@ export const tokenizeLine = (line, lineState) => {
         }
         break
       case State.InsideStyleContent:
-        if ((next = part.match(RE_STYLE_CONTENT_END))) {
+        if (
+          (next =
+            part.match(RE_STYLE_CONTENT_END) ||
+            part.match(RE_STYLE_CONTENT_END_2))
+        ) {
           token = TokenType.TagName
           state = State.AfterClosingTagName
-          tokens.push(TokenType.PunctuationTag, 2, TokenType.TagName, 6)
+          tokens.push(
+            TokenType.PunctuationTag,
+            2,
+            TokenType.TagName,
+            next[0].length - 1
+          )
           embeddedLanguageEnd = index
           index += next[0].length
           embeddedLanguage = ''
