@@ -7,7 +7,7 @@ const root = path.join(__dirname, '..')
 
 await copyFiles({
   root,
-  files: ['README.md', 'extension.json', 'src'],
+  files: ['README.md', 'extension.json', 'languageConfiguration.json', 'src'],
   outDir: join(root, 'dist'),
 })
 
