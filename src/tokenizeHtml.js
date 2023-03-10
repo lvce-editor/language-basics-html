@@ -296,9 +296,15 @@ export const tokenizeLine = (line, lineState) => {
         } else if ((next = part.match(RE_DOUBLE_QUOTE))) {
           token = TokenType.Punctuation
           state = State.InsideDoubleQuoteString
+        } else if ((next = part.match(RE_ANGLE_BRACKET_OPEN_TAG))) {
+          token = TokenType.PunctuationTag
+          state = State.AfterOpeningAngleBracket
         } else if ((next = part.match(RE_TAG_TEXT))) {
           token = TokenType.Text
           state = State.TopLevelContent
+        } else if ((next = part.match(RE_WHITESPACE))) {
+          token = TokenType.Whitespace
+          state = State.InsideOpeningTagAndHasSeenWhitespace
         } else {
           part //?
           throw new Error('no')
@@ -453,6 +459,9 @@ export const tokenizeLine = (line, lineState) => {
   }
   if (state === State.AfterClosingTagAngleBrackets) {
     state = State.TopLevelContent
+  }
+  if (state === State.InsideOpeningTag) {
+    state = State.InsideOpeningTagAndHasSeenWhitespace
   }
   return {
     state,

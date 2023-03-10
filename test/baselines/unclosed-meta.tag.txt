@@ -1,7 +1,12 @@
 PunctuationTag
 TagName
-Text
+PunctuationTag
 NewLine
+Text
+PunctuationTag
+TagName
+NewLine
+PunctuationTag
 PunctuationTag
 TagName
 PunctuationTag
