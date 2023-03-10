@@ -46,8 +46,10 @@ PunctuationTag
 TagName
 NewLine
 Whitespace
-Text
-Text
+PunctuationTag
+PunctuationTag
+TagName
+PunctuationTag
 NewLine
 Text
 PunctuationTag
