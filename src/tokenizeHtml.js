@@ -463,6 +463,9 @@ export const tokenizeLine = (line, lineState) => {
   if (state === State.InsideOpeningTag) {
     state = State.InsideOpeningTagAndHasSeenWhitespace
   }
+  if (state === State.AfterAttributeEqualSign) {
+    state = State.InsideOpeningTag
+  }
   return {
     state,
     tokens,
