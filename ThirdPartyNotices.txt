@@ -51,6 +51,7 @@ IN THE SOFTWARE.
 
 
 3) License Notice for languageConfiguration.json (copied from https://github.com/microsoft/vscode/blob/53b2bf8f7729da4e8bdc55111b20248e6af572c9/extensions/html/language-configuration.json)
+---------------------------------------
 
 MIT License
 
@@ -73,3 +74,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+
+3) License Notice for test/cases/script-types.html.json (copied from https://github.com/textmate/html.tmbundle/blob/master/Tests/Script%20Types.html)
+---------------------------------------
+
+Permission to copy, use, modify, sell and distribute this
+software is granted. This software is provided "as is" without
+express or implied warranty, and with no claim as to its
+suitability for any purpose.
