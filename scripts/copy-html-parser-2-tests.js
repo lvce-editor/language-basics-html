@@ -7,7 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
 
 const REPOSITORY = 'https://github.com/fb55/htmlparser2'
-const COMMIT = '415d21b98bb30422748da68885084ee83857858a'
+const COMMIT = '7475934d4062d7eb86c534c035ddac6146e15780'
 
 const getTestName = (line) => {
   return (
