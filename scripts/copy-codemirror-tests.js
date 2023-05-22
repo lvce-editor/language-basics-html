@@ -6,7 +6,8 @@ import { cp, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
 
-const COMMIT = '24592e00aadd00e35c5fb40ce1f79dbbe2ccd380'
+const REPO = 'https://github.com/lezer-parser/html'
+const COMMIT = '0bf20993f067c01ac9c6e8aacf35ae151fbd5542'
 
 const getTestName = (line) => {
   return (
@@ -73,9 +74,7 @@ const getAllTests = async (folder) => {
 const main = async () => {
   process.chdir(root)
   await rm(`${root}/.tmp`, { recursive: true, force: true })
-  await execaCommand(
-    `git clone https://github.com/lezer-parser/html .tmp/code-mirror-html`
-  )
+  await execaCommand(`git clone ${REPO} .tmp/code-mirror-html`)
   process.chdir(`${root}/.tmp/code-mirror-html`)
   await execaCommand(`git checkout ${COMMIT}`)
   process.chdir(root)
