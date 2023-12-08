@@ -1,0 +1,13 @@
+Comment
+Comment
+Comment
+NewLine
+PunctuationTag
+TagName
+PunctuationTag
+Text
+PunctuationTag
+PunctuationTag
+TagName
+PunctuationTag
+NewLine
