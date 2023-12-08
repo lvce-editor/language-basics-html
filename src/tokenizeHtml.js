@@ -432,6 +432,12 @@ export const tokenizeLine = (line, lineState) => {
         } else if ((next = part.match(RE_WHITESPACE))) {
           token = TokenType.Whitespace
           state = State.AfterAttributeEqualSign
+        } else if ((next = part.match(RE_ANGLE_BRACKET_OPEN))) {
+          token = TokenType.Text
+          state = State.AfterAttributeEqualSign
+        } else if ((next = part.match(RE_ANY_TEXT))) {
+          token = TokenType.Text
+          state = State.TopLevelContent
         } else {
           part
           throw new Error('no')
@@ -504,7 +510,7 @@ export const tokenizeLine = (line, lineState) => {
             TokenType.PunctuationTag,
             2,
             TokenType.TagName,
-            next[0].length - 1
+            next[0].length - 1,
           )
           embeddedLanguageEnd = index
           index += next[0].length
