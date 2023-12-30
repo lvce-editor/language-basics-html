@@ -22,9 +22,5 @@
     "semi": false,
     "singleQuote": true
   },
-  "test-tokenize": {
-    "skip": [
-      "multiple-attribute-equal-signs"
-    ]
-  }
+  "test-tokenize": {}
 }
