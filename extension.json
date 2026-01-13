@@ -5,9 +5,12 @@
   "languages": [
     {
       "id": "html",
-      "extensions": [".html"],
+      "extensions": [
+        ".html"
+      ],
       "tokenize": "src/tokenizeHtml.js",
       "configuration": "./languageConfiguration.json"
     }
-  ]
+  ],
+  "repository": "https://github.com/lvce-editor/language-basics-html"
 }
