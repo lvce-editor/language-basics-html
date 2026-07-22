@@ -44,7 +44,7 @@ const main = async () => {
   await cp(
     `${root}/.tmp/html-parser-2/src/__fixtures__/Documents`,
     `${root}/.tmp/html-parser-2-cases`,
-    { recursive: true }
+    { recursive: true },
   )
   const allTests = await getAllTests(`${root}/.tmp/html-parser-2-cases`)
   for (const test of allTests) {
