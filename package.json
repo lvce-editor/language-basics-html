@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "node ./node_modules/@lvce-editor/server/bin/server.js ./test/cases --only-extension=.",
     "lint": "eslint . && prettier --check . && knip --no-config-hints",
-    "test": "test-syntax-highlighting"
+    "test": "test-syntax-highlighting && node --test test/tokenizeHtml.test.js"
   },
   "prettier": {
     "semi": false,

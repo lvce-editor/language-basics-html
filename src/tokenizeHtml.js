@@ -214,9 +214,17 @@ export const tokenizeLine = (line, lineState) => {
   let token = TokenType.None
   let state = lineState.state
   let tag = lineState.tag
-  let embeddedLanguage = lineState.embeddedLanguage
-  let embeddedLanguageStart = lineState.embeddedLanguageStart
-  let embeddedLanguageEnd = lineState.embeddedLanguageEnd
+  const continuesEmbeddedLanguage =
+    state === State.InsideScriptContent || state === State.InsideStyleContent
+  let embeddedLanguage = continuesEmbeddedLanguage
+    ? lineState.embeddedLanguage
+    : ''
+  let embeddedLanguageStart = continuesEmbeddedLanguage
+    ? lineState.embeddedLanguageStart
+    : 0
+  let embeddedLanguageEnd = continuesEmbeddedLanguage
+    ? lineState.embeddedLanguageEnd
+    : 0
   let specialTag = lineState.specialTag
   let attributeName = ''
   let type = ''
@@ -486,7 +494,6 @@ export const tokenizeLine = (line, lineState) => {
           state = State.AfterClosingTagName
           tokens.push(TokenType.PunctuationTag, 2, TokenType.TagName, 6)
           index += next[0].length
-          embeddedLanguage = ''
           continue
         } else if ((next = part.match(RE_SCRIPT_CONTENT))) {
           token = TokenType.Embedded
@@ -514,7 +521,6 @@ export const tokenizeLine = (line, lineState) => {
           )
           embeddedLanguageEnd = index
           index += next[0].length
-          embeddedLanguage = ''
           continue
         } else if ((next = part.match(RE_STYLE_CONTENT))) {
           token = TokenType.Embedded
