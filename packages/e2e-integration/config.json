@@ -1,0 +1,14 @@
+{
+  "artifacts": [
+    ["src", "extensions/builtin.language-basics-html/src"],
+    [
+      "extension.json",
+      "extensions/builtin.language-basics-html/extension.json"
+    ],
+    [
+      "languageConfiguration.json",
+      "extensions/builtin.language-basics-html/languageConfiguration.json"
+    ]
+  ],
+  "scripts": []
+}
