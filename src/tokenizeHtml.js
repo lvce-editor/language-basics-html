@@ -196,6 +196,8 @@ const getType = (value) => {
     case 'application/json':
     case 'application/ld+json':
       return 'json'
+    case 'text/plain':
+      return 'plaintext'
     default:
       return ''
   }
@@ -227,7 +229,7 @@ export const tokenizeLine = (line, lineState) => {
     : 0
   let specialTag = lineState.specialTag
   let attributeName = ''
-  let type = ''
+  let type = lineState.type
   while (index < line.length) {
     const part = line.slice(index)
     switch (state) {
